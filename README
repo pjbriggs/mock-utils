@@ -1,4 +1,10 @@
-mock-utils
+e mock-utils
 ==========
 
 Utility scripts for building RPMs using mock.
+
+mockit.sh - build RPM for target platform given spec file and sources
+
+mock-rebuild.sh - rebuild RPM for target platform from SPRM
+
+--
