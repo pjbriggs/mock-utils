@@ -15,7 +15,7 @@ if [ ! -f /etc/mock/${target}.cfg ] ; then
     exit 1
 fi
 if [ ! -f $srpm ] ; then
-    echo SRPM $spec not found
+    echo SRPM $srpm not found
     exit 1
 fi
 # Run rebuild
