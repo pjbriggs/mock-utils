@@ -1,10 +1,29 @@
-e mock-utils
+mock-utils
 ==========
 
 Utility scripts for building RPMs using mock.
 
-mockit.sh - build RPM for target platform given spec file and sources
+mockit.sh - build RPM for target platform
+------------------------------------------
 
-mock-rebuild.sh - rebuild RPM for target platform from SPRM
+Usage: mockit.sh TARGET SPEC SOURCES [ RPM [ RPM ... ] ]
+
+mockit.sh creates the SRPM and RPM for the specified platform TARGET (must be
+one of the available /etc/mock/*.cfg files), given a SPEC file and directory
+SOURCES containing the required source archives and patches etc.
+
+If additional RPMs are specified on the command line then mockit.sh will put
+these into a temporary repository which is made available to the mock build
+environment. This provides a way of pulling in dependencies which aren't
+available through the standard yum repositories (most likely because you've
+build them yourself).
+
+mock-rebuild.sh - rebuild RPM from SPRM
+----------------------------------------
+
+Usage: mock-rebuild.sh TARGET SRPM
+
+mock-rebuild.sh generates the RPM for the specified platform TARGET (must be
+one of the available /etc/mock/*.cfg files) given an existing SRPM.
 
 --
