@@ -4,6 +4,8 @@
 # It will also include any dependent RPMs explicitly specified on the
 # command line
 #
+# Location to put the SRPM and RPM
+mockdir=${HOME}/mock-rpms
 # Collect target platform, SPEC file and sources location from command line
 target=$1
 spec=$2
@@ -75,17 +77,17 @@ fi
 srpm=`ls /var/lib/mock/$target/result/*.src.rpm`
 if [ -f "$srpm" ] ; then
     echo $srpm
-    if [ ! -d $HOME/mock/$target ] ; then
-	mkdir -p $HOME/mock/$target
+    if [ ! -d $mockdir/$target ] ; then
+	mkdir -p $mockdir/$target
     fi
-    /bin/cp $srpm $HOME/mock/$target
+    /bin/cp $srpm $mockdir/$target
 else
     echo Source RPM not found in /var/lib/mock/$target/result/
     /bin/rm -rf ${wd}
     exit 1
 fi
 # Create RPMs from SRPM
-mock --configdir=$wd -r $target --rebuild $HOME/mock/$target/`basename $srpm`
+mock --configdir=$wd -r $target --rebuild $mockdir/$target/`basename $srpm`
 if [ $? != 0 ] ; then
     echo mock exited with an error building RPMs
     /bin/rm -rf ${wd}
@@ -100,7 +102,7 @@ if [ -z "$rpms" ] ; then
 fi
 for rpm in $rpms ; do
     echo $rpm
-    /bin/cp $rpm $HOME/mock/$target
+    /bin/cp $rpm $mockdir/$target
 done
 # Clean up temporary directory
 /bin/rm -rf ${wd}

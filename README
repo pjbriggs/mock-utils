@@ -18,6 +18,8 @@ environment. This provides a way of pulling in dependencies which aren't
 available through the standard yum repositories (most likely because you've
 build them yourself).
 
+The generated SRPM and RPMs are put into $HOME/mock-rpms/TARGET
+
 mock-rebuild.sh - rebuild RPM from SPRM
 ----------------------------------------
 
@@ -25,5 +27,7 @@ Usage: mock-rebuild.sh TARGET SRPM
 
 mock-rebuild.sh generates the RPM for the specified platform TARGET (must be
 one of the available /etc/mock/*.cfg files) given an existing SRPM.
+
+The generated RPMs are put into $HOME/mock-rpms/TARGET
 
 --

@@ -2,6 +2,8 @@
 #
 # Build RPMs from SRPMs using mock
 #
+# Location to put the SRPM and RPM
+mockdir=${HOME}/mock-rpms
 # Collect target platform and SRPM from command line
 target=$1
 srpm=$2
@@ -32,9 +34,9 @@ if [ -z "$rpms" ] ; then
 fi
 for rpm in $rpms ; do
     echo $rpm
-    if [ ! -d $HOME/mock/$target ] ; then
-	mkdir -p $HOME/mock/$target
+    if [ ! -d $mockdir/$target ] ; then
+	mkdir -p $mockdir/$target
     fi
-    /bin/cp $rpm $HOME/mock/$target
+    /bin/cp $rpm $mockdir/$target
 done
 echo Done
