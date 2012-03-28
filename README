@@ -16,7 +16,7 @@ If additional RPMs are specified on the command line then mockit.sh will put
 these into a temporary repository which is made available to the mock build
 environment. This provides a way of pulling in dependencies which aren't
 available through the standard yum repositories (most likely because you've
-build them yourself).
+built them yourself).
 
 The generated SRPM and RPMs are put into $HOME/mock-rpms/TARGET
 
