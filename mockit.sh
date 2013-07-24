@@ -11,13 +11,33 @@ target=$1
 spec=$2
 sources=$3
 if [ -z "$target" ] || [ -z "$spec" ] || [ -z "$sources" ] ; then
-    echo Usage: `basename $0` TARGET SPECFILE SOURCES [ RPM [ RPM... ] ]
+    echo "Usage: $(basename $0) TARGET SPECFILE SOURCES [ RPM [ RPM... ] ]"
+    echo ""
+    echo "TARGET:   target platform e.g. epel-6-x86_64 corresponding to a"
+    echo "          cfg file in /etc/mock OR the name of a custom cfg file"
+    echo "          (can include a leading path)"
+    echo ""
+    echo "SPECFILE: name/path of RPM spec file to build"
+    echo ""
+    echo "SOURCES:  directory containing source code archives, patch files"
+    echo "          etc"
+    echo ""
+    echo "Subsequent arguments are optional and specify custom RPMs that"
+    echo "are required to build this RPM."
     exit
 fi
 # Check inputs
-if [ ! -f /etc/mock/${target}.cfg ] ; then
-    echo No cfg file for $target in /etc/mock/
-    exit 1
+cfg=${target}
+if [ ! -f "$cfg" ] ; then
+    # Not a file, trying current dir
+    cfg=$(pwd)/${target}.cfg
+    if [ ! -f "$cfg" ] ; then
+	cfg=/etc/mock/${target}.cfg
+	if [ ! -f "$cfg" ] ; then
+	    echo Unable to locate cfg file for $target
+	    exit 1
+	fi
+    fi
 fi
 if [ ! -f $spec ] ; then
     echo SPEC file $spec not found
@@ -27,6 +47,8 @@ if [ ! -d $sources ] ; then
     echo SOURCES directory $sources not found
     exit 1
 fi
+# (Re)extract target platform name
+target=$(basename ${cfg%.*})
 # Check dependencies
 dependencies=
 while [ ! -z $4 ] ; do
@@ -46,7 +68,16 @@ echo Temporary dir for cfg and mock-updates repo = $wd
 # Copy the cfg files to working directory
 cp /etc/mock/logging.ini $wd
 cp /etc/mock/site-defaults.cfg $wd
-cp /etc/mock/${target}.cfg $wd
+cp ${cfg} $wd
+# Report settings
+cat <<EOF
+Target platform: ${target}
+Cfg file       : ${cfg}
+Spec file      : ${spec}
+Sources dir    : ${sources}
+Dependencies   : ${dependencies}
+Working dir    : ${wd}
+EOF
 # Create a temporary repo with the specified RPMs
 if [ ! -z "$dependencies" ] ; then
     mkdir ${wd}/mock-updates
